@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/hamed-hbf11/Project_MVC_SE/issues"
   },
-  "homepage": "https://github.com/hamed-hbf11/Project_MVC_SE#readme"
+  "homepage": "https://github.com/hamed-hbf11/Project_MVC_SE#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "sqlite3": "^5.1.7"
+  }
 }
