@@ -122,7 +122,7 @@ app.post('/api/posts', (req, res) => {
         if (err) {
             console.error('Error creating post:', err);
             res.status(500).json({ error: 'Faild to create post' });
-        }else{
+        } else {
             res.status(201).json({
                 id: this.lastID,
                 title,
@@ -136,6 +136,39 @@ app.post('/api/posts', (req, res) => {
 });
 
 //Put update a blog post 
+app.put('/api/posts/:id', (req, res) => {
+    console.log('PUT /api/posts/:id - Updating blog post');
+
+    const { id } = req.params;
+    const { title, content, author } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ error: 'Title and content are required' });
+    }
+
+    const sql = `
+    UPDATE posts
+    SET title = ?, content = ?, author = ?, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+    `;
+
+    db.run(sql, [title, content, author || 'Anonymous', id], function (err) {
+        if (err) {
+            console.error('Error updating post:', err);
+            res.status(500).json({ error: 'Failed to update post' })
+        } else if (this.changes === 0) {
+            res.status(404).json({ error: 'Post not Found' });
+        } else {
+            res.json({
+                id,
+                title,
+                content,
+                author: author || 'Anonymous',
+                updatedAt: new Date().toISOString()
+            });
+        }
+    });
+});
 
 //DELETE a blog post 
 
