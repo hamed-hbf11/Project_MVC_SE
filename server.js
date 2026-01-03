@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const { resolve } = require('dns');
 const { rejects } = require('assert');
+const { count } = require('console');
 
 const app = express();
 const PORT = 3001;
@@ -26,7 +27,7 @@ function initializeDatabase() {
                 //create posts table if it dosen't exist
                 db.run(`
                     CREATE TABLE IF NOT EXISTS posts (
-                    id INTEGER PRIMARY KEY AUTOINCREAMENT,
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     title TEXT NOT NULL,
                     content TEXT NOT NULL,
                     author TEXT DEFAULT 'Anonymous',
@@ -103,6 +104,36 @@ app.get('/api/posts', async (req, res) => {
 });
 
 //Post create a new blog post 
+app.post('/api/posts', (req, res) => {
+    console.log('POST /api/posts - Creating new blog post');
+
+    const { title, content, author } = req.body;
+
+    if (!title || !content) {
+        return res.status(400).json({ error: 'Title and Content are required' });
+    }
+
+    const sql = `
+        INSERT INTO posts (title, content, author, created_at, updated_at)
+        VALUES(?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    `;
+
+    db.run(sql, [title, content, author || 'Anonymous'], function (err) {
+        if (err) {
+            console.error('Error creating post:', err);
+            res.status(500).json({ error: 'Faild to create post' });
+        }else{
+            res.status(201).json({
+                id: this.lastID,
+                title,
+                content,
+                author: author || 'Anonymous',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+        }
+    });
+});
 
 //Put update a blog post 
 
@@ -130,18 +161,18 @@ async function startServer() {
     }
 }
 
-process.on('SIGINT' , ()=>{
+process.on('SIGINT', () => {
     console.log('\n Shutting down server...');
-    if(db){
-        db.close((err)=>{
-            if(err){
+    if (db) {
+        db.close((err) => {
+            if (err) {
                 console.error('Error closing database:', err);
-            }else{
+            } else {
                 console.log('Database connection closed');
             }
             process.exit(0);
         });
-    }else{
+    } else {
         process.exit(0);
     }
 });
