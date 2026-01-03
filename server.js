@@ -171,6 +171,22 @@ app.put('/api/posts/:id', (req, res) => {
 });
 
 //DELETE a blog post 
+app.delete('/api/posts/:id', (req, res) => {
+    console.log('DELETE /api/posts/:id - Deleting blog post');
+
+    const { id } = req.params;
+
+    db.run('DELETE FROM posts WHERE id = ?', { id }, function (err) {
+        if (err) {
+            console.error('Error deleting post:', err);
+            res.status(500).json({ error: 'Failed to delete post' });
+        } else if (this.changes === 0) {
+            res.status(404).json({ error: 'Post not found' });
+        } else {
+            res.json({ message: 'Post deleted successfully' });
+        }
+    });
+});
 
 //initialize and start server 
 async function startServer() {
