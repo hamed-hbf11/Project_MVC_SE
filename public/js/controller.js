@@ -18,7 +18,7 @@ class BlogController {
         this.handlePostUpdated = this.handlePostUpdated.bind(this);
         this.handlePostDeleted = this.handlePostDeleted.bind(this);
     }
-    
+
     // Initialization
     async initialize() {
         if (this.isInitialized) {
@@ -88,7 +88,17 @@ class BlogController {
         }
     }
 
-    //   async handlePostUpdate(updateData) {}
+    async handlePostUpdate(updateData) {
+        try {
+            console.log('Updating post:', updateData.id);
+            await this.model.updatePost(updateData.id, updateData);
+            this.view.showSuccess('Post updated successfully!');
+        } catch (error) {
+            console.error('Failed to update post:', error);
+            this.view.showError('Failed to update post. Please try again.');
+        }
+    }
+
 
     //   async handlePostDelete(postId)
 
