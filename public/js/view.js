@@ -262,7 +262,7 @@ class BlogView {
         const closeBtn = document.getElementById('close-edit-modal');
 
         if (form) {
-            form.addEventListener('submit', (e) => this.handleEditSubmit(e, postId));
+            form.addEventListener('submit', (e) => this.handleEditSubmit(e));
         }
 
         if (closeBtn) {
