@@ -144,7 +144,12 @@ class BlogController {
         this.view.renderPosts(this.model.posts); // Re-render the updated list
     }
 
-    //   handlePostDeleted(postId) {}
+    handlePostDeleted(postId) {
+        console.log('Post deleted successfully', postId);
+        // Re-render posts after deletion
+        const updatedPosts = this.model.posts.filter(post => post.id !== postId);
+        this.view.renderPosts(updatedPosts);
+    }
 
     handleLoadingStart() {
         console.log('Loading started');
