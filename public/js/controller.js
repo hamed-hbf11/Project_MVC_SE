@@ -104,9 +104,9 @@ class BlogController {
             console.log('Deleting post:', postId);
             await this.model.deletePost(postId);
             this.view.showSuccess('Post deleted successfully!');
-        } catch {
+        } catch (error) {
             console.error('Failed to delete post:', error);
-            this.view.showError('Failed to delete post. please try again.');
+            this.view.showError('Failed to delete post. Please try again.');
         }
     }
 
@@ -140,11 +140,11 @@ class BlogController {
 
     handlePostUpdated(updatedPost) {
         console.log('Post updated successfully:', updatedPost.id);
-        this.view.renderPosts(this.model.posts); // Re-render the updated list
+        this.view.renderPosts(this.model.posts);  // Re-render the updated list
     }
 
     handlePostDeleted(postId) {
-        console.log('Post deleted successfully', postId);
+        console.log('Post deleted successfully:', postId);
         // Re-render posts after deletion
         const updatedPosts = this.model.posts.filter(post => post.id !== postId);
         this.view.renderPosts(updatedPosts);
