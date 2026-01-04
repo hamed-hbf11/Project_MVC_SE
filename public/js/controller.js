@@ -99,8 +99,16 @@ class BlogController {
         }
     }
 
-
-    //   async handlePostDelete(postId)
+    async handlePostDelete(postId) {
+        try{
+            console.log('Deleting post:' , postId);
+            await this.model.deletePost(postId);
+            this.view.showSuccess('Post deleted successfully!');
+        }catch{
+            console.error('Failed to delete post:', error);
+            this.view.showError('Failed to delete post. please try again.');
+        }
+    }
 
     //   handlePostEdit(postId) {}
 
