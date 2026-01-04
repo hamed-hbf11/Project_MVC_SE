@@ -318,13 +318,21 @@ class BlogView {
     handleDelete(postId) {
         const confirmed = confirm('Are you sure you want to delete this post?');
 
-        if(!confirmed)
+        if (!confirmed)
             return;
 
         this.notifyObservers('onPostDelete', postId);
     }
-    
-    //  displayEditFormErrors(errors) {}
+
+    displayEditFormErrors(errors) {
+        errors.forEach(error => {
+            const errorEl = document.getElementById(`edit-${error.field}-error`);
+            if (errorEl) {
+                errorEl.textContent = error.message;
+                errorEl.style.display = 'block';
+            }
+        });
+    }
 
     // Form utilities
     populateForm(postData) {
