@@ -99,7 +99,7 @@ class BlogModel {
                 body: JSON.stringify(postData),
             });
 
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
@@ -107,7 +107,7 @@ class BlogModel {
 
             //update local state
             const index = this.posts.findIndex(post => post.id === postId);
-            if(index !== -1){
+            if (index !== -1) {
                 this.posts[index] = {
                     ...this.posts[index],
                     ...updatePost,
@@ -116,17 +116,42 @@ class BlogModel {
 
             this.notifyObservers('onPostUpdated', updatePost);
             return updatePost;
-            
-        }catch(error){
-            console.error('Error updating post:' , error);
+
+        } catch (error) {
+            console.error('Error updating post:', error);
             this.notifyObservers('onError', error.message);
             throw error;
-        }finally{
+        } finally {
             this.setLoading(false);
         }
     }
 
-    // async deletePost(postId)
+    async deletePost(postId) {
+        this.setLoading(true);
+
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/${postId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            //remove from local state
+            this.posts = this.posts.filter(post => post.id !== postId);
+
+            this.notifyObservers('onPostDelete', postId);
+            return true;
+
+        } catch (error) {
+            console.error('Error deleting post:', error);
+            this.notifyObservers('onError', error.message);
+            throw error;
+        } finally {
+            this.setLoading(false);
+        }
+    }
 
     //utility methods 
     setLoading(loading) {
