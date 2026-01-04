@@ -269,7 +269,7 @@ class BlogView {
         }
     }
 
-    async handleEditSubmit(e, postId) { 
+    async handleEditSubmit(e, postId) {
         e.preventDefault();
 
         const title = document.getElementById('edit-title').value.trim();
@@ -277,22 +277,22 @@ class BlogView {
 
         this.clearEditFormErrors();
 
-        const errors =[];
-        if(title.length < 3){
+        const errors = [];
+        if (title.length < 3) {
             error.push({
-                field:'title',
+                field: 'title',
                 message: 'Title must be at least 3 characters long'
             });
         }
 
-        if(content.length < 10){
+        if (content.length < 10) {
             errors.push({
                 field: 'content',
                 message: 'Content must be at least 10 characters long'
             });
         }
 
-        if(errors.length>0){
+        if (errors.length > 0) {
             this.displayEditFormErrors(errors);
             return;
         }
@@ -305,8 +305,16 @@ class BlogView {
 
         this.hideEditModal();
     }
-    
-    //   clearEditFormErrors() {}
+
+    clearEditFormErrors() {
+        const errors = this.editFormContainer.querySelectorAll('.error-message');
+
+        errors.forEach(el => {
+            el.textContent = '';
+            el.style.display = 'none';
+        });
+    }
+
     //   handleDelete(postId) {}
     //  displayEditFormErrors(errors) {}
     //  handleDelete(postId) {}
