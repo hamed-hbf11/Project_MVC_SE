@@ -122,7 +122,6 @@ class BlogController {
         }
     }
 
-
     // Event handlers
     handleViewInitialized() {
         console.log('View initialized');
