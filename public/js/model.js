@@ -99,13 +99,13 @@ class BlogModel {
         const errors = [];
 
         if (!postData.title || postData.title.trim().length === 0) {
-            error.push('Title is required');
+            errors.push('Title is required');
         } else if (postData.title.trim().length < 3) {
             errors.push('Title must be at least 3 characters long');
         }
 
         if (!postData.content || postData.content.trim().length === 0) {
-            error.push('Content is required');
+            errors.push('Content is required');
         } else if (postData.content.trim().length < 10) {
             errors.push('Content must be at least 10 characters long');
         }
