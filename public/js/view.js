@@ -472,5 +472,5 @@ class BlogView {
     }
 }
 
-window.viewExplanation = viewExplanation;
+// window.viewExplanation = viewExplanation;
 window.BlogView = BlogView;

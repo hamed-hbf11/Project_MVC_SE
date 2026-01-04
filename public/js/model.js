@@ -194,5 +194,5 @@ class BlogModel {
     }
 }
 
-window.modelExplanation = modelExplanation;
+// window.modelExplanation = modelExplanation;
 window.BlogModel = BlogModel;
