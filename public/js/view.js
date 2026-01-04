@@ -315,9 +315,16 @@ class BlogView {
         });
     }
 
-    //   handleDelete(postId) {}
+    handleDelete(postId) {
+        const confirmed = confirm('Are you sure you want to delete this post?');
+
+        if(!confirmed)
+            return;
+
+        this.notifyObservers('onPostDelete', postId);
+    }
+    
     //  displayEditFormErrors(errors) {}
-    //  handleDelete(postId) {}
 
     // Form utilities
     populateForm(postData) {
