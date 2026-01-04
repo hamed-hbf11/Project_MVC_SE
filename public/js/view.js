@@ -256,7 +256,19 @@ class BlogView {
         this.attachEditFormEventListeners(postData.id);
     }
 
-    //   attachEditFormEventListeners() {}
+    attachEditFormEventListeners() {
+        const form = document.getElementById('edit-post-form');
+        const closeBtn = document.getElementById('close-edit-modal');
+
+        if(form){
+            form.addEventListener('submit' , (e) => this.handleEditSubmit(e, postId));
+        }
+
+        if(closeBtn){
+            closeBtn.addEventListener('click', this.hideEditModal);
+        }
+    }
+    
     // async handleEditSubmit(e) {}
     //   clearEditFormErrors() {}
     //   handleDelete(postId) {}
