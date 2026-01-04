@@ -219,8 +219,16 @@ class BlogView {
         // The controller should handle the edit logic and call showEditModal
     }
 
-    //   showEditModal(postData) {}
-    //   hideEditModal() {}
+    showEditModal(postData) {
+        this.editModal.style.display = 'block';
+        this.renderEditForm(postData);
+    }
+
+    hideEditModal() { 
+        this.editModal.style.display = 'none';
+        this.clearEditFormErrors();
+    }
+    
     //  renderEditForm(postData) {}
     //   attachEditFormEventListeners() {}
     // async handleEditSubmit(e) {}
