@@ -260,16 +260,52 @@ class BlogView {
         const form = document.getElementById('edit-post-form');
         const closeBtn = document.getElementById('close-edit-modal');
 
-        if(form){
-            form.addEventListener('submit' , (e) => this.handleEditSubmit(e, postId));
+        if (form) {
+            form.addEventListener('submit', (e) => this.handleEditSubmit(e, postId));
         }
 
-        if(closeBtn){
+        if (closeBtn) {
             closeBtn.addEventListener('click', this.hideEditModal);
         }
     }
+
+    async handleEditSubmit(e, postId) { 
+        e.preventDefault();
+
+        const title = document.getElementById('edit-title').value.trim();
+        const content = document.getElementById('edit-content').value.trim();
+
+        this.clearEditFormErrors();
+
+        const errors =[];
+        if(title.length < 3){
+            error.push({
+                field:'title',
+                message: 'Title must be at least 3 characters long'
+            });
+        }
+
+        if(content.length < 10){
+            errors.push({
+                field: 'content',
+                message: 'Content must be at least 10 characters long'
+            });
+        }
+
+        if(errors.length>0){
+            this.displayEditFormErrors(errors);
+            return;
+        }
+
+        this.notifyObservers('onPostUpdate', {
+            id: postId,
+            title,
+            content,
+        });
+
+        this.hideEditModal();
+    }
     
-    // async handleEditSubmit(e) {}
     //   clearEditFormErrors() {}
     //   handleDelete(postId) {}
     //  displayEditFormErrors(errors) {}
