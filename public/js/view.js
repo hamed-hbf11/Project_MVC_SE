@@ -224,12 +224,38 @@ class BlogView {
         this.renderEditForm(postData);
     }
 
-    hideEditModal() { 
+    hideEditModal() {
         this.editModal.style.display = 'none';
         this.clearEditFormErrors();
     }
-    
-    //  renderEditForm(postData) {}
+
+    renderEditForm(postData) {
+        this.editFormContainer.innerHTML = `
+        <form id="edit-post-form">
+            <h3>Edit Blog Post</h3>
+
+            <div class="form-group">
+                <label for="edit-title">Title</label>
+                <input id="edit-title" name="title" value="${this.escapeHtml(postData.title)}" />
+                <div id="edit-title-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-content">Content</label>
+                <textarea id="edit-content" name="content">${this.escapeHtml(postData.content)}</textarea>
+                <div id="edit-content-error" class="error-message"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="button" class="btn btn-secondary" id="close-edit-modal">Cancel</button>
+            </div>
+        </form>
+    `;
+
+        this.attachEditFormEventListeners(postData.id);
+    }
+
     //   attachEditFormEventListeners() {}
     // async handleEditSubmit(e) {}
     //   clearEditFormErrors() {}
