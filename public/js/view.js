@@ -114,10 +114,13 @@ class BlogView {
                 </div>
             </article>
     `;
-        // renderPostContent(content) {}
-
-        // renderPostForm {}
     }
+
+    renderPostContent(content){
+        return `<p>${this.escapeHtml(content)}</p>`;
+    }
+
+    // renderPostForm {}
 
     // Event handling
     attachPostEventListeners() {
