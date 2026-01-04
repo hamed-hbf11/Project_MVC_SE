@@ -118,7 +118,7 @@ class BlogView {
     }
 
     renderPostContent(content) {
-        return `<p>${this.escapeHtml(content)}</p>`;
+        return `<p>${this.escapeHtml(content).replace(/\n/g, '<br>')}</p>`;
     }
 
     renderPostForm() {
@@ -270,8 +270,11 @@ class BlogView {
         }
     }
 
-    async handleEditSubmit(e, postId) {
+    async handleEditSubmit(e) {
         e.preventDefault();
+
+        const form = e.target;
+        const postId = Number(form.dataset.postId);
 
         const title = document.getElementById('edit-title').value.trim();
         const content = document.getElementById('edit-content').value.trim();
@@ -279,8 +282,9 @@ class BlogView {
         this.clearEditFormErrors();
 
         const errors = [];
+
         if (title.length < 3) {
-            error.push({
+            errors.push({
                 field: 'title',
                 message: 'Title must be at least 3 characters long'
             });
@@ -420,12 +424,12 @@ class BlogView {
 
     showError(message) {
         this.errorContainer.innerHTML = `
-      <div class="error-message">
-        <span class="error-icon">⚠️</span>
-        <span class="error-text">${this.escapeHtml(message)}</span>
-        <button class="error-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
-      </div>
-    `;
+        <div class="error-message">
+            <span class="error-icon">⚠️</span>
+            <span class="error-text">${this.escapeHtml(message)}</span>
+            <button class="error-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+        </div>
+        `;
         this.errorContainer.style.display = 'block';
     }
 
@@ -438,9 +442,9 @@ class BlogView {
         const successDiv = document.createElement('div');
         successDiv.className = 'success-message';
         successDiv.innerHTML = `
-      <span class="success-icon">✅</span>
-      <span class="success-text">${this.escapeHtml(message)}</span>
-    `;
+        <span class="success-icon">✅</span>
+        <span class="success-text">${this.escapeHtml(message)}</span>
+        `;
 
         document.body.appendChild(successDiv);
 
