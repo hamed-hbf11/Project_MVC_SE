@@ -45,16 +45,16 @@ class BlogView {
     initialize() {
         this.setupDOMElements();
         this.renderPostForm();
-        this.notifyObservers("onViewInitialized");
+        this.notifyObservers('onViewInitialized');
     }
 
     setupDOMElements() {
-        this.postsContainer = document.getElementById("posts-container");
-        this.formContainer = document.getElementById("form-container");
-        this.loadingIndicator = document.getElementById("loading-indicator");
-        this.errorContainer = document.getElementById("error-container");
-        this.editModal = document.getElementById("edit-modal");
-        this.editFormContainer = document.getElementById("edit-form-container");
+        this.postsContainer = document.getElementById('posts-container');
+        this.formContainer = document.getElementById('form-container');
+        this.loadingIndicator = document.getElementById('loading-indicator');
+        this.errorContainer = document.getElementById('error-container');
+        this.editModal = document.getElementById('edit-modal');
+        this.editFormContainer = document.getElementById('edit-form-container');
 
         if (
             !this.postsContainer ||
@@ -62,7 +62,7 @@ class BlogView {
             !this.loadingIndicator ||
             !this.errorContainer
         ) {
-            throw new Error("Required DOM elements not found. Check HTML structure.");
+            throw new Error('Required DOM elements not found. Check HTML structure.');
         }
     }
 
@@ -70,17 +70,17 @@ class BlogView {
     renderPosts(posts) {
         if (!posts || posts.length === 0) {
             this.postsContainer.innerHTML = `
-                <div class="no-posts">
-                    <h3>No blog posts yet</h3>
-                    <p>Be the first to create a blog post!</p>
-                </div>
-            `;
+            <div class="no-posts">
+            <h3>No blog posts yet</h3>
+            <p>Be the first to create a blog post!</p>
+            </div>
+        `;
             return;
         }
 
         this.postsContainer.innerHTML = posts
             .map((post) => this.renderPostCard(post))
-            .join("");
+            .join('');
         this.attachPostEventListeners();
     }
 
@@ -89,31 +89,32 @@ class BlogView {
         const isEditing = this.currentEditId === post.id;
 
         return `
-            <article class="post-card" data-post-id="${post.id}">
-                <div class="post-header">
-                    <h2 class="post-title">${this.escapeHtml(post.title)}</h2>
-                    <div class="post-meta">
-                        <span class="post-date">${formattedDate}</span>
-                        ${post.updatedAt !== post.createdAt
+        <article class="post-card" data-post-id="${post.id}">
+            <div class="post-header">
+            <h2 class="post-title">${this.escapeHtml(post.title)}</h2>
+            <div class="post-meta">
+                <span class="post-date">${formattedDate}</span>
+                ${post.updatedAt !== post.createdAt
                 ? '<span class="post-updated">Updated</span>'
-                : ""}
-                    </div>
-                </div>
-                <div class="post-content">
-                    ${this.renderPostContent(post.content)}
-                </div>
-                <div class="post-actions">
-                    <button class="btn btn-edit" data-action="edit" 
-                    data-post-id="${post.id}">
-                        <span class="icon">✏️</span> Edit
-                    </button>
-                    <button class="btn btn-delete" data-action="delete" 
-                    data-post-id="${post.id}">
-                        <span class="icon">🗑️</span> Delete
-                    </button>
-                </div>
-            </article>
-    `;
+                : ''
+            }
+            </div>
+            </div>
+            <div class="post-content">
+            ${this.renderPostContent(post.content)}
+            </div>
+            <div class="post-actions">
+            <button class="btn btn-edit" data-action="edit" data-post-id="${post.id
+            }">
+                <span class="icon">✏️</span> Edit
+            </button>
+            <button class="btn btn-delete" data-action="delete" data-post-id="${post.id
+            }">
+                <span class="icon">🗑️</span> Delete
+            </button>
+            </div>
+        </article>
+        `;
     }
 
     renderPostContent(content) {
@@ -407,7 +408,6 @@ class BlogView {
         });
         inputElements.forEach((element) => element.classList.remove('error'));
     }
-
     // UI state management
     showLoading() {
         this.loadingIndicator.style.display = 'block';
@@ -420,12 +420,12 @@ class BlogView {
 
     showError(message) {
         this.errorContainer.innerHTML = `
-            <div class="error-message">
-                <span class="error-icon">⚠️</span>
-                <span class="error-text">${this.escapeHtml(message)}</span>
-                <button class="error-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
-            </div>
-        `;
+      <div class="error-message">
+        <span class="error-icon">⚠️</span>
+        <span class="error-text">${this.escapeHtml(message)}</span>
+        <button class="error-close" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+      </div>
+    `;
         this.errorContainer.style.display = 'block';
     }
 
@@ -438,9 +438,9 @@ class BlogView {
         const successDiv = document.createElement('div');
         successDiv.className = 'success-message';
         successDiv.innerHTML = `
-            <span class="success-icon">✅</span>
-            <span class="success-text">${this.escapeHtml(message)}</span>
-        `;
+      <span class="success-icon">✅</span>
+      <span class="success-text">${this.escapeHtml(message)}</span>
+    `;
 
         document.body.appendChild(successDiv);
 
