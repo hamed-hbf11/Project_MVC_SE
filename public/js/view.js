@@ -116,11 +116,40 @@ class BlogView {
     `;
     }
 
-    renderPostContent(content){
+    renderPostContent(content) {
         return `<p>${this.escapeHtml(content)}</p>`;
     }
 
-    // renderPostForm {}
+    renderPostForm() {
+        const isEditing = Boolean(this.currentEditId);
+
+        this.formContainer.innerHTML = `
+        <form id="post-form" class="post-form">
+            <h3>${isEditing ? 'Edit Post' : 'Create New Post'}</h3>
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" />
+                <div id="title-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea id="content" name="content"></textarea>
+                <div id="content-error" class="error-message"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    ${isEditing ? 'Update Post' : 'Create Post'}
+                </button>
+                ${isEditing ? `<button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>` : ''}
+            </div>
+        </form>
+    `;
+
+        this.attachFormEventListeners();
+    }
 
     // Event handling
     attachPostEventListeners() {
