@@ -114,10 +114,10 @@ class BlogController {
         console.log('Editing post:', postId);
 
         const post = this.model.getPostById(postId);
-        if(post){
+        if (post) {
             this.view.populateForm(post);
             this.view.showEditModal(post);
-        }else{
+        } else {
             this.view.showError('Post not found for editing.');
         }
     }
@@ -139,7 +139,10 @@ class BlogController {
         this.loadPosts(); // Refresh the list
     }
 
-    //   handlePostUpdated(updatedPost) {}
+    handlePostUpdated(updatedPost) {
+        console.log('Post updated successfully:', updatedPost.id);
+        this.view.renderPosts(this.model.posts); // Re-render the updated list
+    }
 
     //   handlePostDeleted(postId) {}
 
