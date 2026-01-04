@@ -100,17 +100,27 @@ class BlogController {
     }
 
     async handlePostDelete(postId) {
-        try{
-            console.log('Deleting post:' , postId);
+        try {
+            console.log('Deleting post:', postId);
             await this.model.deletePost(postId);
             this.view.showSuccess('Post deleted successfully!');
-        }catch{
+        } catch {
             console.error('Failed to delete post:', error);
             this.view.showError('Failed to delete post. please try again.');
         }
     }
 
-    //   handlePostEdit(postId) {}
+    handlePostEdit(postId) {
+        console.log('Editing post:', postId);
+
+        const post = this.model.getPostById(postId);
+        if(post){
+            this.view.populateForm(post);
+            this.view.showEditModal(post);
+        }else{
+            this.view.showError('Post not found for editing.');
+        }
+    }
 
 
     // Event handlers
