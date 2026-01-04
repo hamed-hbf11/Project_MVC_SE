@@ -7,8 +7,8 @@
     <title>Blog MVC - RESTful API Demo</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,8 +16,8 @@
         <!-- Header -->
         <header class="app-header">
             <div class="header-content">
-                <h1 class="app-title"> Blog MVC </h1>
-                <p class="app-subtitle"> RESTful API with javascript MVC Architecture</p>
+                <h1 class="app-title">📝 Blog MVC</h1>
+                <p class="app-subtitle">RESTful API with JavaScript MVC Architecture</p>
             </div>
         </header>
 
@@ -26,11 +26,11 @@
             <!-- Form Section -->
             <section class="form-section">
                 <div class="section-header">
-                    <h2> Create or Edit Posts</h2>
-                    <p class="section-description"> Write your thoughts and share them with the world </p>
+                    <h2>Create or Edit Posts</h2>
+                    <p class="section-description">Write your thoughts and share them with the world</p>
                 </div>
                 <div id="form-container" class="form-container">
-                    <!-- Form will be rendered here by javaScript -->
+                    <!-- Form will be rendered here by JavaScript -->
                 </div>
             </section>
 
@@ -49,12 +49,12 @@
 
                 <!-- Error Container -->
                 <div id="error-container" class="error-container" style="display: none;">
-                    <!-- Enter message will be display here -->
+                    <!-- Error messages will be displayed here -->
                 </div>
 
-                <!-- Post Container -->
+                <!-- Posts Container -->
                 <div id="posts-container" class="posts-container">
-                    <!-- Post will be rendered here by javascript -->
+                    <!-- Posts will be rendered here by JavaScript -->
                 </div>
             </section>
         </main>
@@ -63,13 +63,13 @@
         <footer class="app-footer">
             <div class="footer-content">
                 <p>&copy; 2024 Blog MVC Demo - Educational Project</p>
-                <p class="tech-stack">Build with: javaScript, Express.js, RESTful API, MVC Pattern</p>
+                <p class="tech-stack">Built with: JavaScript, Express.js, RESTful API, MVC Pattern</p>
             </div>
         </footer>
     </div>
 
     <!-- Educational Modal (Hidden by default) -->
-    <div id="educational-modal" class="modal" style="display: none">
+    <div id="educational-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>MVC Architecture Explained</h2>
@@ -92,10 +92,11 @@
     </div>
 
     <!-- Educational Button -->
-    <button id="educational-btn" class="educational-btn" title="learn about MVC Architecture">
-        MVC
+    <button id="educational-btn" class="educational-btn" title="Learn about MVC Architecture">
+        📚 MVC
     </button>
 
+    <!-- Scripts -->
     <script src="js/model.js"></script>
     <script src="js/view.js"></script>
     <script src="js/controller.js"></script>
