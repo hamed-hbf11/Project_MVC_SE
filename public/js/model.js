@@ -6,7 +6,7 @@ class BlogModel {
         this.isLoading = false;
     }
 
-    // Observer patterm implementation
+    // Observer pattern implementation
     addObserver(observer) {
         this.observers.push(observer);
     }
@@ -23,7 +23,7 @@ class BlogModel {
         });
     }
 
-    // API Methods
+    //   API Methods
     async loadPosts() {
         this.setLoading(true);
         this.notifyObservers('onLoadingStart');
@@ -33,13 +33,14 @@ class BlogModel {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
             this.posts = await response.json();
             this.notifyObservers('onPostsLoaded', this.posts);
             return this.posts;
         } catch (error) {
-            console.error('Error loading posts:' + error);
+            console.error('Error loading posts:', error);
             this.notifyObservers('onError', error.message);
-            throw error
+            throw error;
         } finally {
             this.setLoading(false);
             this.notifyObservers('onLoadingEnd');
@@ -50,7 +51,7 @@ class BlogModel {
         this.setLoading(true);
 
         try {
-            //validate post data
+            // Validate post data
             const validationErrors = this.validatePostData(postData);
             if (validationErrors.length > 0) {
                 throw new Error(validationErrors.join('. '));
@@ -70,7 +71,7 @@ class BlogModel {
 
             const newPost = await response.json();
             this.posts.unshift(newPost); // Add to beginning
-            this.notifyObservers('onPostCreates', newPost);
+            this.notifyObservers('onPostCreated', newPost);
             return newPost;
         } catch (error) {
             console.error('Error creating post:', error);
@@ -85,7 +86,7 @@ class BlogModel {
         this.setLoading(true);
 
         try {
-            //validate post data
+            // validate post data
             const validationErrors = this.validatePostData(postData);
             if (validationErrors.length > 0) {
                 throw new Error(validationErrors.join('. '));
@@ -103,19 +104,19 @@ class BlogModel {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const updatePost = await response.json();
+            const updatedPost = await response.json();
 
-            //update local state
+            // update local state
             const index = this.posts.findIndex(post => post.id === postId);
             if (index !== -1) {
                 this.posts[index] = {
                     ...this.posts[index],
-                    ...updatePost,
+                    ...updatedPost,
                 };
             }
 
-            this.notifyObservers('onPostUpdated', updatePost);
-            return updatePost;
+            this.notifyObservers('onPostUpdated', updatedPost);
+            return updatedPost;
 
         } catch (error) {
             console.error('Error updating post:', error);
@@ -138,10 +139,10 @@ class BlogModel {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            //remove from local state
+            // remove from local state
             this.posts = this.posts.filter(post => post.id !== postId);
 
-            this.notifyObservers('onPostDelete', postId);
+            this.notifyObservers('onPostDeleted', postId);
             return true;
 
         } catch (error) {
@@ -153,7 +154,7 @@ class BlogModel {
         }
     }
 
-    //utility methods 
+    // Utility methods
     setLoading(loading) {
         this.isLoading = loading;
         this.notifyObservers('onLoadingChange', loading);
@@ -184,9 +185,9 @@ class BlogModel {
     formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
-            year: "numeric",
+            year: 'numeric',
             month: 'short',
-            day: "numeric",
+            day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
         });
