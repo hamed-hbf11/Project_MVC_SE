@@ -174,6 +174,9 @@ async function initializeApp() {
     log('Initializing Blog MVC application...');
 
     try {
+        // Initialize theme first
+        initializeTheme();
+
         // Check if required components are available
         if (!window.BlogModel || !window.BlogView || !window.BlogController) {
             throw new Error('Required MVC components not found');
@@ -191,6 +194,11 @@ async function initializeApp() {
             controller,
             config: CONFIG
         };
+
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
 
         // Setup educational modal
         const educationalBtn = document.getElementById('educational-btn');
