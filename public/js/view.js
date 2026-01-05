@@ -131,13 +131,13 @@ class BlogView {
             <div class="form-group">
                 <label for="title">Title</label>
                 <input id="title" name="title" type="text" />
-                <div id="title-error" class="error-message"></div>
+                <div id="title-error" class="error-message" style="display: none;"></div>
             </div>
 
             <div class="form-group">
                 <label for="content">Content</label>
                 <textarea id="content" name="content"></textarea>
-                <div id="content-error" class="error-message"></div>
+                <div id="content-error" class="error-message" style="display: none;"></div>
             </div>
 
             <div class="form-actions">
@@ -216,7 +216,7 @@ class BlogView {
     }
 
     handleEdit(postId) {
-        const post = this.notifyObservers('onPostEdit', postId);
+        this.notifyObservers('onPostEdit', postId);
         // The controller should handle the edit logic and call showEditModal
     }
 
@@ -232,19 +232,19 @@ class BlogView {
 
     renderEditForm(postData) {
         this.editFormContainer.innerHTML = `
-        <form id="edit-post-form">
+        <form id="edit-post-form" data-post-id="${postData.id}">
             <h3>Edit Blog Post</h3>
 
             <div class="form-group">
                 <label for="edit-title">Title</label>
                 <input id="edit-title" name="title" value="${this.escapeHtml(postData.title)}" />
-                <div id="edit-title-error" class="error-message"></div>
+                <div id="edit-title-error" class="error-message" style="display: none;"></div>
             </div>
 
             <div class="form-group">
                 <label for="edit-content">Content</label>
                 <textarea id="edit-content" name="content">${this.escapeHtml(postData.content)}</textarea>
-                <div id="edit-content-error" class="error-message"></div>
+                <div id="edit-content-error" class="error-message" style="display: none;"></div>
             </div>
 
             <div class="form-actions">
