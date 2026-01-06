@@ -102,7 +102,7 @@ app.get('/api/posts', async (req, res) => {
 
 // POST create a new blog post
 app.post('/api/posts', (req, res) => {
-    console.log('POST /api/posts - Creating new blog post');
+    console.log('✍️ POST /api/posts - Creating new blog post');
 
     const { title, content, author } = req.body;
 
@@ -120,13 +120,24 @@ app.post('/api/posts', (req, res) => {
             console.error('Error creating post:', err);
             res.status(500).json({ error: 'Failed to create post' });
         } else {
-            res.status(201).json({
-                id: this.lastID,
-                title,
-                content,
-                author: author || 'Anonymous',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+            const postId = this.lastID;
+            console.log('✅ Post created with ID:', postId);
+
+            // Fetch the created post to return complete data
+            db.get('SELECT * FROM posts WHERE id = ?', [postId], (err, row) => {
+                if (err) {
+                    console.error('Error fetching created post:', err);
+                    res.status(500).json({ error: 'Failed to fetch created post' });
+                } else {
+                    res.status(201).json({
+                        id: row.id,
+                        title: row.title,
+                        content: row.content,
+                        author: row.author,
+                        createdAt: new Date(row.created_at).toISOString(),
+                        updatedAt: new Date(row.updated_at).toISOString()
+                    });
+                }
             });
         }
     });
@@ -134,7 +145,7 @@ app.post('/api/posts', (req, res) => {
 
 // PUT update a blog post
 app.put('/api/posts/:id', (req, res) => {
-    console.log('PUT /api/posts/:id - Updating blog post');
+    console.log('✏️ PUT /api/posts/:id - Updating blog post');
 
     const { id } = req.params;
     const { title, content, author } = req.body;
@@ -156,12 +167,20 @@ app.put('/api/posts/:id', (req, res) => {
         } else if (this.changes === 0) {
             res.status(404).json({ error: 'Post not found' });
         } else {
-            res.json({
-                id,
-                title,
-                content,
-                author: author || 'Anonymous',
-                updatedAt: new Date().toISOString()
+            db.get('SELECT * FROM posts WHERE id = ?', [id], (err, row) => {
+                if (err) {
+                    console.error('Error fetching updated post:', err);
+                    res.status(500).json({ error: 'Failed to fetch updated post' });
+                } else {
+                    res.json({
+                        id: row.id,
+                        title: row.title,
+                        content: row.content,
+                        author: row.author,
+                        createdAt: new Date(row.created_at).toISOString(),
+                        updatedAt: new Date(row.updated_at).toISOString()
+                    });
+                }
             });
         }
     });
@@ -169,7 +188,7 @@ app.put('/api/posts/:id', (req, res) => {
 
 // DELETE a blog post
 app.delete('/api/posts/:id', (req, res) => {
-    console.log('DELETE /api/posts/:id - Deleting blog post');
+    console.log('🗑️ DELETE /api/posts/:id - Deleting blog post');
 
     const { id } = req.params;
 
@@ -178,9 +197,14 @@ app.delete('/api/posts/:id', (req, res) => {
             console.error('Error deleting post:', err);
             res.status(500).json({ error: 'Failed to delete post' });
         } else if (this.changes === 0) {
+            console.log('❌ Post not found with ID:', id);
             res.status(404).json({ error: 'Post not found' });
         } else {
-            res.json({ message: 'Post deleted successfully' });
+            console.log('✅ Post deleted with ID:', id);
+            res.json({
+                message: 'Post deleted successfully',
+                id: parseInt(id)
+            });
         }
     });
 });

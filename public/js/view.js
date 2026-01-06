@@ -154,9 +154,17 @@ class BlogView {
 
     // Event handling
     attachPostEventListeners() {
+        const oldContainer = this.postsContainer;
+        const newContainer = oldContainer.cloneNode(true);
+        oldContainer.parentNode.replaceChild(newContainer, oldContainer);
+        this.postsContainer = newContainer;
+
         this.postsContainer.addEventListener('click', (e) => {
             const action = e.target.closest('[data-action]');
             if (!action) return;
+
+            e.preventDefault();
+            e.stopPropagation();
 
             // Ensure postId is a number to match model's numeric IDs
             const postId = Number(action.dataset.postId);
@@ -221,16 +229,33 @@ class BlogView {
     }
 
     showEditModal(postData) {
-        this.editModal.style.display = 'block';
+        if (!this.editModal || !this.editFormContainer) {
+            console.error('Edit modal elements not found');
+            return;
+        }
+
         this.renderEditForm(postData);
+        this.editModal.style.display = 'block';
     }
 
     hideEditModal() {
-        this.editModal.style.display = 'none';
-        this.clearEditFormErrors();
+        console.log('Hiding edit modal...');
+        if (this.editModal) {
+            this.editModal.style.display = 'none';
+        }
+
+        if (this.editFormContainer) {
+            this.editFormContainer.innerHTML = '';
+        }
     }
 
     renderEditForm(postData) {
+        this.originalPostData = {
+            id: postData.id,
+            title: postData.title,
+            content: postData.content
+        };
+
         this.editFormContainer.innerHTML = `
         <form id="edit-post-form" data-post-id="${postData.id}">
             <h3>Edit Blog Post</h3>
@@ -249,7 +274,6 @@ class BlogView {
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save Changes</button>
-                <button type="button" class="btn btn-secondary" id="close-edit-modal">Cancel</button>
             </div>
         </form>
     `;
@@ -259,15 +283,42 @@ class BlogView {
 
     attachEditFormEventListeners() {
         const form = document.getElementById('edit-post-form');
-        const closeBtn = document.getElementById('close-edit-modal');
+        const cancelBtn = document.querySelector('.cancel-edit-btn');
+        const modalCloseBtn = this.editModal.querySelector('.close');
 
         if (form) {
             form.addEventListener('submit', (e) => this.handleEditSubmit(e));
         }
 
-        if (closeBtn) {
-            closeBtn.addEventListener('click', this.hideEditModal);
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Cancel button clicked');
+                this.hideEditModal();
+            });
         }
+
+        if (modalCloseBtn) {
+            modalCloseBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.hideEditModal();
+            });
+        }
+
+        this.editModal.addEventListener('click', (e) => {
+            if (e.target === this.editModal) {
+                this.hideEditModal();
+            }
+        });
+
+        const modalClickHandler = (e) => {
+            if (e.target === this.editModal) {
+                this.hideEditModal();
+            }
+        };
+
+        this.editModal.removeEventListener('click', modalClickHandler);
+        this.editModal.addEventListener('click', modalClickHandler);
     }
 
     async handleEditSubmit(e) {
@@ -280,6 +331,20 @@ class BlogView {
         const content = document.getElementById('edit-content').value.trim();
 
         this.clearEditFormErrors();
+
+        if (this.originalPostData &&
+            this.originalPostData.title === title &&
+            this.originalPostData.content === content) {
+
+            console.log('No changes detected. Skipping update.');
+
+            // نمایش پیام
+            this.showWarning('No changes were made to the post.');
+
+            // بستن مودال
+            this.hideEditModal();
+            return; // ❌ request ارسال نمی‌شود
+        }
 
         const errors = [];
 
@@ -326,6 +391,7 @@ class BlogView {
         if (!confirmed)
             return;
 
+        console.log('Deleting post with ID:', postId);
         this.notifyObservers('onPostDelete', postId);
     }
 
@@ -453,6 +519,20 @@ class BlogView {
         }, 3000);
     }
 
+    showWarning(message) {
+        const warningDiv = document.createElement('div');
+        warningDiv.className = 'warning-message';
+        warningDiv.innerHTML = `
+        <span class="warning-icon">ℹ️</span>
+        <span class="warning-text">${this.escapeHtml(message)}</span>
+    `;
+
+        document.body.appendChild(warningDiv);
+
+        setTimeout(() => {
+            warningDiv.remove();
+        }, 3000);
+    }
     // Utility methods
     formatDate(dateString) {
         const date = new Date(dateString);

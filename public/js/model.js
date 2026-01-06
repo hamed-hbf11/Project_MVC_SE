@@ -110,7 +110,8 @@ class BlogModel {
             const index = this.posts.findIndex(post => post.id === postId);
             if (index !== -1) {
                 this.posts[index] = {
-                    ...this.posts[index],
+                    id: postId,
+                    // ...this.posts[index],
                     ...updatedPost,
                 };
             }

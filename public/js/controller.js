@@ -115,7 +115,7 @@ class BlogController {
 
         const post = this.model.getPostById(postId);
         if (post) {
-            this.view.populateForm(post);
+            // this.view.populateForm(post);
             this.view.showEditModal(post);
         } else {
             this.view.showError('Post not found for editing.');
