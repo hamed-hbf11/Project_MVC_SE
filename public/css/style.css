@@ -555,6 +555,11 @@ body {
     animation: slideIn 0.3s ease-out;
 }
 
+[data-theme="dark"] .warning-message {
+    background: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+}
+
 /* Educational Button */
 .educational-btn {
     position: fixed;
