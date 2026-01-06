@@ -6,6 +6,54 @@ const CONFIG = {
     RETRY_DELAY: 1000
 };
 
+// In-memory storage for first visit flag
+let hasVisited = false;
+
+// Theme management
+let currentTheme = 'light';
+
+function initializeTheme() {
+    // Check system preference or saved theme
+    const savedTheme = getCurrentTheme();
+    currentTheme = savedTheme;
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeIcon();
+}
+
+function getCurrentTheme() {
+    // Check if user has a system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDark ? 'dark' : 'light';
+}
+
+function toggleTheme() {
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    updateThemeIcon();
+
+    // Animate the transition
+    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+}
+
+function updateThemeIcon() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.textContent = currentTheme === 'light' ? '🌙' : '☀️';
+        themeToggle.setAttribute('aria-label',
+            currentTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'
+        );
+    }
+}
+
+// Listen for system theme changes
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!hasVisited) { // Only auto-switch if user hasn't manually changed theme
+        currentTheme = e.matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+    }
+});
+
 // Global error handler
 window.addEventListener('error', (event) => {
     console.error('Global error:', event.error);
@@ -126,6 +174,9 @@ async function initializeApp() {
     log('Initializing Blog MVC application...');
 
     try {
+        // Initialize theme first
+        initializeTheme();
+
         // Check if required components are available
         if (!window.BlogModel || !window.BlogView || !window.BlogController) {
             throw new Error('Required MVC components not found');
@@ -143,6 +194,11 @@ async function initializeApp() {
             controller,
             config: CONFIG
         };
+
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
 
         // Setup educational modal
         const educationalBtn = document.getElementById('educational-btn');
@@ -174,6 +230,12 @@ async function initializeApp() {
             }, 1000);
         }
 
+        if (!hasVisited) {
+            setTimeout(() => {
+                showEducationalModal();
+                hasVisited = true;
+            }, 1000);
+        }
     } catch (error) {
         console.error('Failed to initialize application:', error);
 
