@@ -2,7 +2,7 @@ class BlogModel {
     constructor() {
         this.posts = [];
         this.observers = [];
-        this.apiBaseUrl = 'https://mvc.liara.run:3001/api/posts';
+        this.apiBaseUrl = 'https://mvc.liara.run/api/posts';
         this.isLoading = false;
         
     }

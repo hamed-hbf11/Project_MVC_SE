@@ -1,6 +1,6 @@
 // Application configuration
 const CONFIG = {
-    API_BASE_URL: 'https://mvc.liara.run:3001',
+    API_BASE_URL: 'https://mvc.liara.run',
     DEBUG_MODE: true,
     MAX_RETRIES: 3,
     RETRY_DELAY: 1000
