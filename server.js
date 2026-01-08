@@ -2,10 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = 3001;
-const DB_PATH = path.join(__dirname, 'data', 'blog.db');
+const DB_PATH = '/app/storage/blog-db/blog.db';
 
 // Middleware
 app.use(cors());
@@ -14,6 +15,10 @@ app.use(express.static('public'));
 
 function initializeDatabase() {
     return new Promise((resolve, reject) => {
+        if (!fs.existsSync('/app/data')) {
+            fs.mkdirSync('/app/data', { recursive: true });
+        }
+
         const db = new sqlite3.Database(DB_PATH, (err) => {
             if (err) {
                 console.error('Error opening database:', err);
