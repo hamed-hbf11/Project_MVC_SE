@@ -215,7 +215,7 @@ async function startServer() {
         db = await initializeDatabase();
 
         app.listen(PORT, () => {
-            console.log(`🚀 Blog MVC REST API Server running on http://localhost:${PORT}`);
+            console.log(`🚀 Blog MVC REST API Server running on https://mvc.liara.run:${PORT}`);
             console.log('📚 Available endpoints:');
             console.log('   GET    /api/posts');
             console.log('   GET    /api/posts/:id');
@@ -223,7 +223,7 @@ async function startServer() {
             console.log('   PUT    /api/posts/:id');
             console.log('   DELETE /api/posts/:id');
             console.log('');
-            console.log('🌐 Client application: http://localhost:' + PORT);
+            console.log('🌐 Client application: https://mvc.liara.run:' + PORT);
         });
     } catch (error) {
         console.error('Failed to start server:', error);
