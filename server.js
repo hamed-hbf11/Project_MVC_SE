@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
-const dbDir = '/app/storage/blog-db';
-const dbPath = path.join(dbDir, 'blog.db');
+const PORT = process.env.PORT || 3001;
+const DB_DIR = path.join(__dirname, 'storage', 'blog-db');
+const DB_PATH = path.join(DB_DIR, 'blog.db');
 
 // Middleware
 app.use(cors());
@@ -16,12 +16,12 @@ app.use(express.static('public'));
 
 function initializeDatabase() {
     return new Promise((resolve, reject) => {
-        if (!fs.existsSync('/app/data')) {
-            fs.mkdirSync('/app/data', { recursive: true });
+        if (!fs.existsSync(DB_DIR)) {
+            fs.mkdirSync(DB_DIR, { recursive: true });
         }
         const sqlite3 = require('sqlite3').verbose();
 
-        const db = new sqlite3.Database(dbPath, (err) => {
+        const db = new sqlite3.Database(DB_PATH, (err) => {
             if (err) {
                 console.error('Error opening database:', err);
                 reject(err);
@@ -222,7 +222,7 @@ async function startServer() {
         db = await initializeDatabase();
 
         app.listen(PORT, () => {
-            console.log(`🚀 Blog MVC REST API Server running on https://mvc.liara.run:${PORT}`);
+            console.log(`🚀 Server running on port ${PORT}`);
             console.log('📚 Available endpoints:');
             console.log('   GET    /api/posts');
             console.log('   GET    /api/posts/:id');
